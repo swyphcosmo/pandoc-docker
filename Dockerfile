@@ -1,9 +1,10 @@
 FROM haskell:8.0
 
-MAINTAINER James Gregory <james@jagregory.com>
+MAINTAINER Michael Vernier <swyphcosmo@gmail.com>
 
 # install latex packages
 RUN apt-get update -y \
+  && apt-get upgrade -y \
   && apt-get install -y -o Acquire::Retries=10 --no-install-recommends \
     texlive-latex-base \
     texlive-xetex latex-xcolor \
@@ -19,7 +20,9 @@ RUN apt-get update -y \
 ENV PANDOC_VERSION "1.19.2.1"
 
 # install pandoc
-RUN cabal update && cabal install pandoc-${PANDOC_VERSION}
+RUN cabal update \
+  && cabal install hsb2hs-0.3.1 \
+  && cabal install pandoc-${PANDOC_VERSION} -fembed_data_files
 
 WORKDIR /source
 
